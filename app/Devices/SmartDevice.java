@@ -1,12 +1,18 @@
 package app.Devices;
 
+import app.Interfaces.DeviceObserver;
+import app.Interfaces.ObservableDevice;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public abstract class SmartDevice<E extends Enum<E>> {
+public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice {
 
     private UUID id;
     private String name;
     private E status;
+    private List<DeviceObserver> observableDeviceList = new ArrayList<>();
 
     public SmartDevice(String name , E defaultStatus) {
         this.id = UUID.randomUUID();
@@ -19,14 +25,39 @@ public abstract class SmartDevice<E extends Enum<E>> {
         return this.name + " | ID: " + this.id + " | Status: " + this.status;
     }
 
+    @Override
+    public void addObserver(DeviceObserver observer) {
+        this.observableDeviceList.add(observer);
+    }
+
+    @Override
+    public void removeObserver(DeviceObserver observer) {
+        this.observableDeviceList.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String eventType, String description) {
+        for (DeviceObserver device : observableDeviceList) {
+            device.update(this, eventType, description);
+        }
+    }
+
     public abstract void simulate();
 
     public void setStatus(E status) {
         if (status != null) {
+            E prevStatus = this.status;
             this.status = status;
+            notifyObservers("Status changed" , String.format("Status was changed form %s to %s" , prevStatus , this.status));
         } else {
             throw new IllegalArgumentException("Incorrect device status.");
         }
+    }
+
+    public void setName(String name){
+        String prevName = this.name;
+        this.name = name;
+        notifyObservers("Name changed" , String.format("Status was changed form %s to %s" , prevName , this.name));
     }
 
     public E getStatus() {
@@ -41,7 +72,7 @@ public abstract class SmartDevice<E extends Enum<E>> {
         return this.id;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public List<DeviceObserver> getObservableDeviceList() {
+        return observableDeviceList;
     }
 }

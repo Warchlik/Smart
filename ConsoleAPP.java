@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,6 +6,7 @@ import app.Controllers.DeviceController;
 import app.Controllers.HomeController;
 import app.Controllers.RoomController;
 import app.Devices.SmartDevice;
+import app.FileLogger;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
 import app.House.Home;
@@ -17,11 +17,14 @@ public class ConsoleAPP {
     private boolean running = true;
     private final List<Home> homeList = new ArrayList<>();
 
-    private final HomeController homeController = new HomeController();
-    private final RoomController roomController = new RoomController();
-    private final DeviceController deviceController = new DeviceController();
+    private final HomeController homeController;
+    private final RoomController roomController;
+    private final DeviceController deviceController;
 
     public ConsoleAPP(){
+        this.homeController = new HomeController();
+        this.roomController = new RoomController();
+        this.deviceController = new DeviceController(new FileLogger("smart_logs.tsv"));
         this.openInterface();
     }
 
@@ -64,7 +67,7 @@ public class ConsoleAPP {
             return;
         }
 
-        System.out.println("\nChoice home:");
+        System.out.println("\n=== Choice home ===");
         PrintHelper.showList(this.homeList);
         String homeIndex = ValidatorHelper.checkIndexString("\nChoice Option: ", scanner , this.homeList);
         List<Room> rooms = this.homeList.get(Integer.parseInt(homeIndex)).getRooms();
@@ -85,7 +88,7 @@ public class ConsoleAPP {
             return;
         }
 
-        System.out.println("\nChoice home");
+        System.out.println("\n=== Choice home ===");
         PrintHelper.showList(this.homeList);
         String homeIndex = ValidatorHelper.checkIndexString("\nChoice Option: " , scanner , this.homeList);
         List<Room> rooms = this.homeList.get(Integer.parseInt(homeIndex)).getRooms();
@@ -96,10 +99,12 @@ public class ConsoleAPP {
             return;
         }
 
-        System.out.println("\nChoice room");
+        System.out.println("\n=== Choice room ===");
         PrintHelper.showList(rooms);
         String room = ValidatorHelper.checkIndexString("\nChoice Option: " , scanner , rooms);
-        List<SmartDevice<?>> devices = rooms.get(Integer.parseInt(room)).getDeviceList();
+        Room selectedRoom = rooms.get(Integer.parseInt(room));
+        List<SmartDevice<?>> devices = selectedRoom.getDeviceList();
+        this.deviceController.setRoomName(selectedRoom);
         while (true){
             PrintHelper.showDeviceMenu();
             String choice = PrintHelper.readLine("\nChoice Option: " , scanner);

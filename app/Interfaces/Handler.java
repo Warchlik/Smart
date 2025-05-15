@@ -21,7 +21,9 @@ public abstract class Handler<T> {
 
     protected void handleAdd(List<T> list, Scanner scanner) {
         System.out.println("Add new");
-        list.add(this.generateNewObject(scanner));
+        T newObject = this.generateNewObject(scanner);
+        list.add(newObject);
+        this.onAdd(newObject);
         System.out.println();
         System.out.println("Added: " + list.getLast());
         PrintHelper.waitForEnter(scanner);
@@ -42,7 +44,9 @@ public abstract class Handler<T> {
                 if ("0".equals(attribute)){
                     break;
                 }
-                this.setAttributes(attribute , scanner , list.get(Integer.parseInt(index)));
+                T editItem = list.get(Integer.parseInt(index));
+                this.setAttributes(attribute , scanner , editItem);
+                this.onEdit(editItem);
                 PrintHelper.waitForEnter(scanner);
                 break;
             }catch (Exception e){
@@ -60,7 +64,8 @@ public abstract class Handler<T> {
             try {
                 printList(list);
                 String index = PrintHelper.readLine("\nChose Item from list to remove: ", scanner);
-                list.remove(Integer.parseInt(index));
+                T removedItem = list.remove(Integer.parseInt(index));
+                this.onRemove(removedItem);
                 System.out.println("\nItem has been removed.");
                 PrintHelper.waitForEnter(scanner);
                 break;
@@ -85,6 +90,11 @@ public abstract class Handler<T> {
         System.out.println("\n--- CURRENT LIST ---");
         PrintHelper.showList(list);
     }
+
+    //hooks
+    protected void onAdd(T item){}
+    protected void onEdit(T item ){}
+    protected void onRemove(T item){}
 
     protected abstract void setAttributes(String choice, Scanner scanner, T item);
     protected abstract void showEditMenu();

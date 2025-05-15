@@ -1,3 +1,5 @@
+package app;
+
 import app.Devices.SmartDevice;
 import app.Interfaces.DeviceObserver;
 
@@ -26,10 +28,8 @@ public class FileLogger implements DeviceObserver {
         );
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(filename, true))) {
-
             out.write(line);
             out.newLine();
-
         } catch (Exception e) {
             e.printStackTrace();
         }

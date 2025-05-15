@@ -1,17 +1,22 @@
 package app.Controllers;
 
 import app.Devices.*;
+import app.FileLogger;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
+import app.House.Room;
 import app.Interfaces.Handler;
 import app.Interfaces.Switchable;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class DeviceController extends Handler<SmartDevice<?>> {
+
+    private final FileLogger fileLogger;
+    private String roomName;
+
+    public DeviceController(FileLogger fileLogger) {
+        this.fileLogger = fileLogger;
+    }
 
     @Override
     protected void setAttributes(String choice, Scanner scanner, SmartDevice<?> item) {
@@ -35,16 +40,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
 
         E[] choices = device.getStatus().getDeclaringClass().getEnumConstants();
 
-//        List<E> filtered = new ArrayList<>();
-//        for (E e : enumList) {
-//            if ("ON".equals(e.name()) || "OFF".equals(e.name())) {
-//                filtered.add(e);
-//            }
-//        }
-//
-//        choices = (E[]) filtered.toArray();
-
-        E newStatus = ValidatorHelper.checkInputValueEnum("\nChoice new Status: " , scanner ,choices);
+        E newStatus = ValidatorHelper.checkInputValueEnum("\nChoice new Status: " , scanner , choices);
 
         device.setStatus(newStatus);
         System.out.printf("\nStatus has been change to: %s", device.getStatus());
@@ -84,5 +80,21 @@ public class DeviceController extends Handler<SmartDevice<?>> {
                 System.out.println("\nUnexpected value.");
         }
         return device;
+    }
+
+    @Override
+    protected void onAdd(SmartDevice<?> device) {
+        device.addObserver(fileLogger);
+        device.notifyObservers("Added new device" , String.format("Added device %s.", device.getName()));
+    }
+
+
+    @Override
+    protected void onRemove(SmartDevice<?> device) {
+        device.notifyObservers("DEVICE_REMOVED", String.format("Removed device %s from room.", device.getName()));
+    }
+
+    public void setRoomName(Room room){
+        this.roomName = room.getName();
     }
 }
