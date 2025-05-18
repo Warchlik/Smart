@@ -34,7 +34,7 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
             this.saturation = DEFAULT_SATURATION;
             this.value = DEFAULT_VALUE;
             this.setStatus(DeviceEnum.ON);
-            System.out.println("\nYou turn on Lightbulb.");
+            System.out.println("\nYou turn ON Lightbulb.");
         }else {
             System.out.println("\nLightbulb is in use now, you can not ON it second time.");
         }
@@ -45,6 +45,7 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
     public void turnOff() {
         if (isOn()){
             this.setStatus(DeviceEnum.OFF);
+            System.out.println("\nYou turn OFF Lightbulb.");
         }else {
             System.out.println("\nYou can not turn of Lightbulb now.");
         }
