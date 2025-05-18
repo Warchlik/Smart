@@ -15,6 +15,17 @@ public class FileLogger implements DeviceObserver {
 
     public FileLogger(String filename) {
         this.filename = filename;
+        this.initLogFile();
+    }
+
+    private void initLogFile() {
+        String header = String.join("\t", "TIMESTAMP", "DEVICE_ID", "DEVICE_TYPE", "ROOM_NAME", "EVENT_TYPE", "DESCRIPTION");
+        try (BufferedWriter file = new BufferedWriter(new FileWriter(filename))) {
+            file.write(header);
+            file.newLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -23,13 +34,14 @@ public class FileLogger implements DeviceObserver {
                 LocalDateTime.now().format(fmt),
                 device.getId().toString(),
                 device.getClass().getSimpleName(),
+                device.getRoomName().getType().name(),
                 eventType,
                 description
         );
 
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(filename, true))) {
-            out.write(line);
-            out.newLine();
+        try (BufferedWriter file = new BufferedWriter(new FileWriter(filename, true))) {
+            file.write(line);
+            file.newLine();
         } catch (Exception e) {
             e.printStackTrace();
         }

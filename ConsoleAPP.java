@@ -104,7 +104,7 @@ public class ConsoleAPP {
         String room = ValidatorHelper.checkIndexString("\nChoice Option: " , scanner , rooms);
         Room selectedRoom = rooms.get(Integer.parseInt(room));
         List<SmartDevice<?>> devices = selectedRoom.getDeviceList();
-        this.deviceController.setRoomName(selectedRoom);
+        this.deviceController.setRoom(selectedRoom);
         while (true){
             PrintHelper.showDeviceMenu();
             String choice = PrintHelper.readLine("\nChoice Option: " , scanner);

@@ -1,8 +1,10 @@
 package app.Devices;
 
+import app.House.Room;
 import app.Interfaces.DeviceObserver;
 import app.Interfaces.ObservableDevice;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,7 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
     private String name;
     private E status;
     private List<DeviceObserver> observableDeviceList = new ArrayList<>();
+    private Room room;
 
     public SmartDevice(String name , E defaultStatus) {
         this.id = UUID.randomUUID();
@@ -74,5 +77,13 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
 
     public List<DeviceObserver> getObservableDeviceList() {
         return observableDeviceList;
+    }
+
+    public void setRoom(Room room){
+        this.room = room;
+    }
+
+    public Room getRoomName(){
+        return this.room;
     }
 }

@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class DeviceController extends Handler<SmartDevice<?>> {
 
     private final FileLogger fileLogger;
-    private String roomName;
+    private Room room;
 
     public DeviceController(FileLogger fileLogger) {
         this.fileLogger = fileLogger;
@@ -63,7 +63,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
     protected SmartDevice<?> generateNewObject(Scanner scanner) {
         PrintHelper.showAddDeviceMenu();
         String type = ValidatorHelper.checkInputValueString("\nType: " , scanner );
-        String name = ValidatorHelper.checkInputValueString("\nRoom name: " , scanner );
+        String name = ValidatorHelper.checkInputValueString("\nDevice name: " , scanner );
         return this.choseType(type , name);
     }
 
@@ -85,6 +85,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
     @Override
     protected void onAdd(SmartDevice<?> device) {
         device.addObserver(fileLogger);
+        device.setRoom(this.room);
         device.notifyObservers("Added new device" , String.format("Added device %s.", device.getName()));
     }
 
@@ -94,7 +95,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
         device.notifyObservers("DEVICE_REMOVED", String.format("Removed device %s from room.", device.getName()));
     }
 
-    public void setRoomName(Room room){
-        this.roomName = room.getName();
+    public void setRoom(Room room){
+        this.room = room;
     }
 }
