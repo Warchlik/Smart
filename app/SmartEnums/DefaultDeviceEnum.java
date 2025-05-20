@@ -1,6 +1,6 @@
 package app.SmartEnums;
 
-public enum DeviceEnum {
+public enum DefaultDeviceEnum {
     ON,
     OFF,
 }

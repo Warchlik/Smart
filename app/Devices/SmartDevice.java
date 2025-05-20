@@ -25,7 +25,7 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
 
     @Override
     public String toString() {
-        return this.name + " | ID: " + this.id + " | Status: " + this.status;
+        return this.getClass().getSimpleName() + " | Name: " + this.name + " | ID: " + this.id + " | Status: " + this.status;
     }
 
     @Override
@@ -45,13 +45,11 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
         }
     }
 
-    public abstract void simulate();
-
     public void setStatus(E status) {
         if (status != null) {
             E prevStatus = this.status;
             this.status = status;
-            notifyObservers("Status changed" , String.format("Status was changed form %s to %s" , prevStatus , this.status));
+            notifyObservers("CHANGED_STATUS" , String.format("Status was changed form %s to %s" , prevStatus , this.status));
         } else {
             throw new IllegalArgumentException("Incorrect device status.");
         }
@@ -60,7 +58,7 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
     public void setName(String name){
         String prevName = this.name;
         this.name = name;
-        notifyObservers("Name changed" , String.format("Status was changed form %s to %s" , prevName , this.name));
+        notifyObservers("CHANGED_NAME" , String.format("Status was changed form %s to %s" , prevName , this.name));
     }
 
     public E getStatus() {
@@ -86,4 +84,6 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
     public Room getRoomName(){
         return this.room;
     }
+
+    public abstract void simulate();
 }

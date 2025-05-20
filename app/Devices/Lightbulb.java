@@ -1,11 +1,11 @@
 package app.Devices;
 
 import app.Interfaces.Switchable;
-import app.SmartEnums.DeviceEnum;
+import app.SmartEnums.DefaultDeviceEnum;
 
 import java.awt.Color;
 
-public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
+public class Lightbulb extends SmartDevice<DefaultDeviceEnum> implements Switchable {
 
     private double hue;
     private double saturation;
@@ -16,15 +16,10 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
     public static final double DEFAULT_VALUE = 0.98;
 
     public Lightbulb(String name) {
-        super(name , DeviceEnum.OFF);
+        super(name , DefaultDeviceEnum.OFF);
         this.hue = DEFAULT_HUE;
         this.saturation = DEFAULT_SATURATION;
         this.value = DEFAULT_VALUE;
-    }
-
-    @Override
-    public String toString(){
-        return "Lightbulb " + super.toString();
     }
 
     @Override
@@ -33,7 +28,8 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
             this.hue = DEFAULT_HUE;
             this.saturation = DEFAULT_SATURATION;
             this.value = DEFAULT_VALUE;
-            this.setStatus(DeviceEnum.ON);
+            this.setStatus(DefaultDeviceEnum.ON);
+            this.simulate();
             System.out.println("\nYou turn ON Lightbulb.");
         }else {
             System.out.println("\nLightbulb is in use now, you can not ON it second time.");
@@ -44,7 +40,10 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
     @Override
     public void turnOff() {
         if (isOn()){
-            this.setStatus(DeviceEnum.OFF);
+            this.setStatus(DefaultDeviceEnum.OFF);
+            synchronized (this){
+                this.notifyAll();
+            }
             System.out.println("\nYou turn OFF Lightbulb.");
         }else {
             System.out.println("\nYou can not turn of Lightbulb now.");
@@ -53,7 +52,7 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
 
     @Override
     public boolean isOn() {
-        return this.getStatus() != DeviceEnum.OFF;
+        return this.getStatus() != DefaultDeviceEnum.OFF;
     }
 
     public void setHue(double hue) {
@@ -119,8 +118,28 @@ public class Lightbulb extends SmartDevice<DeviceEnum> implements Switchable {
         return new Color(r, g, b);
     }
 
+//    @Override
+//    public void simulate() {
+//
+//    }
+
     @Override
     public void simulate() {
+        Thread thread = new Thread(() -> {
+            synchronized (this) {
+                try {
+                    while (isOn()) {
+                        this.getRGBColor();
+                        notifyObservers("CHANGED_COLOR", "Color has been changed.");
+                        this.wait(5000);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
 
+        thread.setDaemon(true);
+        thread.start();
     }
 }

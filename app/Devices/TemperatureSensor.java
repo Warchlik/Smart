@@ -1,10 +1,11 @@
 package app.Devices;
 
+import app.Interfaces.SensorDevice;
 import app.Interfaces.Switchable;
 import app.SmartEnums.TemperatureSensorEnum;
 import java.util.Random;
 
-public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implements Switchable {
+public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implements Switchable , SensorDevice<Integer> {
 
     private final Random random = new Random();
     private int temperature;
@@ -15,20 +16,21 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
 
     @Override
     public void simulate() {
-        int prevTemperature = this.temperature;
         Thread thread = new Thread(() -> {
-            while (this.getStatus() == TemperatureSensorEnum.OFF) {
+            synchronized (this) {
                 try {
-                    if (getStatus() == TemperatureSensorEnum.ACTIVE) {
+                    while (isOn()) {
+                        int prevTemperature = this.temperature;
                         this.temperature = random.nextInt(81) - 40;
-                        System.out.println(getName() + " | Temperature: " + temperature + "°C");
-                        notifyObservers("Temperature changed" , String.format("Status was changed form %s to %s" , prevTemperature , this.temperature));
-
+                        notifyObservers(
+                                "CHANGED_TEMPERATURE",
+                                String.format("Temperature changed from %d to %d", prevTemperature, this.temperature)
+                        );
+                        this.wait(5000);
                     }
-                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    System.out.println(getName() + " | Wątek symulacji przerwany.");
+                    System.out.println(getName() + " | Simulation thread interrupted.");
                 }
             }
         });
@@ -37,10 +39,15 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
         thread.start();
     }
 
+    protected boolean checkStatusForSensor(){
+        return this.getStatus() == TemperatureSensorEnum.ON || this.getStatus() == TemperatureSensorEnum.ACTIVE;
+    }
+
     @Override
     public void turnOn() {
         if (!isOn()){
             this.setStatus(TemperatureSensorEnum.ON);
+            this.simulate();
             System.out.println("\nYou turn ON TemperatureSensor.");
         }else {
             System.out.println("\nTemperatureSensor is in use now, you can not ON it second time.");
@@ -53,6 +60,9 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
         if (isOn()){
             this.setStatus(TemperatureSensorEnum.OFF);
             System.out.println("\nYou turn OFF TemperatureSensor.");
+            synchronized (this) {
+                this.notifyAll();
+            }
         }else {
             System.out.println("\nYou can not turn of TemperatureSensor now.");
         }
@@ -60,6 +70,16 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
 
     @Override
     public boolean isOn() {
-        return this.getStatus() == TemperatureSensorEnum.ON;
+        return this.getStatus() != TemperatureSensorEnum.OFF;
+    }
+
+    @Override
+    public String getUnit() {
+        return this.getClass().getName();
+    }
+
+    @Override
+    public Integer readValue() {
+        return this.temperature;
     }
 }

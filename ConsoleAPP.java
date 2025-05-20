@@ -69,8 +69,8 @@ public class ConsoleAPP {
 
         System.out.println("\n=== Choice home ===");
         PrintHelper.showList(this.homeList);
-        String homeIndex = ValidatorHelper.checkIndexString("\nChoice Option: ", scanner , this.homeList);
-        List<Room> rooms = this.homeList.get(Integer.parseInt(homeIndex)).getRooms();
+        int homeIndex = ValidatorHelper.checkIndexInt("\nChoice Option: ", scanner , this.homeList);
+        List<Room> rooms = this.homeList.get(homeIndex).getRooms();
         while (true) {
             PrintHelper.showRoomMenu();
             String choice = PrintHelper.readLine("\nChoice Option: ", scanner);
@@ -90,8 +90,8 @@ public class ConsoleAPP {
 
         System.out.println("\n=== Choice home ===");
         PrintHelper.showList(this.homeList);
-        String homeIndex = ValidatorHelper.checkIndexString("\nChoice Option: " , scanner , this.homeList);
-        List<Room> rooms = this.homeList.get(Integer.parseInt(homeIndex)).getRooms();
+        int homeIndex = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , this.homeList);
+        List<Room> rooms = this.homeList.get(homeIndex).getRooms();
 
         if (rooms.isEmpty()){
             System.out.println("\nRoom list is empty, add some home to get access to this options:");
@@ -101,8 +101,8 @@ public class ConsoleAPP {
 
         System.out.println("\n=== Choice room ===");
         PrintHelper.showList(rooms);
-        String room = ValidatorHelper.checkIndexString("\nChoice Option: " , scanner , rooms);
-        Room selectedRoom = rooms.get(Integer.parseInt(room));
+        int room = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , rooms);
+        Room selectedRoom = rooms.get(room);
         List<SmartDevice<?>> devices = selectedRoom.getDeviceList();
         this.deviceController.setRoom(selectedRoom);
         while (true){

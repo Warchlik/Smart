@@ -1,5 +1,6 @@
 package app.Interfaces;
 
+import app.Devices.TemperatureSensor;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
 
@@ -36,7 +37,7 @@ public abstract class Handler<T> {
             return;
         }
         printList(list);
-        String index = ValidatorHelper.checkIndexString("\nChose item from list: " , scanner , list);
+        int index = ValidatorHelper.checkIndexInt("\nChose item from list: " , scanner , list);
         while (true){
             try{
                 this.showEditMenu();
@@ -44,7 +45,7 @@ public abstract class Handler<T> {
                 if ("0".equals(attribute)){
                     break;
                 }
-                T editItem = list.get(Integer.parseInt(index));
+                T editItem = list.get(index);
                 this.setAttributes(attribute , scanner , editItem);
                 this.onEdit(editItem);
                 PrintHelper.waitForEnter(scanner);
@@ -81,14 +82,21 @@ public abstract class Handler<T> {
             System.out.println("\nNo items to show.");
             PrintHelper.waitForEnter(scanner);
         } else {
-            printList(list);
+            printViewList(list);
             PrintHelper.waitForEnter(scanner);
         }
     }
 
     protected void printList(List<T> list) {
-        System.out.println("\n--- CURRENT LIST ---");
+        System.out.println("\n=== Choice Item From List ===");
         PrintHelper.showList(list);
+    }
+
+    protected void printViewList(List<T> list){
+        System.out.println("\n--- CURRENT LIST ---");
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(i + " -> " + list.get(i));
+        }
     }
 
     //hooks

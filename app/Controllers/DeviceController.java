@@ -25,6 +25,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
             case "2": this.editStatus(item , scanner); break;
             case "3": this.turnOnDevice((SmartDevice<?> & Switchable) item); break;
             case "4": this.turnOffDevice((SmartDevice<?> & Switchable) item); break;
+            case "5": this.changeColorIfLightbulb(item , scanner); break;
             case "0": break;
             default : throw new IllegalStateException("\nUnexpected value: " + scanner);
         }
@@ -54,6 +55,27 @@ public class DeviceController extends Handler<SmartDevice<?>> {
         device.turnOff();
     }
 
+    private void changeColorIfLightbulb(SmartDevice<?> device, Scanner scanner) {
+        if (!(device instanceof Lightbulb lightbulb)) {
+            System.out.println("\nThis option is available only for Lightbulb devices.");
+            return;
+        }
+
+        double newHue = ValidatorHelper.checkInputValueFloat("\nNew Hue [0–360]: ", scanner);
+        double newSat = ValidatorHelper.checkInputValueFloat("\nNew Saturation [0–1]: ", scanner);
+        double newVal = ValidatorHelper.checkInputValueFloat("\nNew Value [0–1]: ", scanner);
+
+        try {
+            lightbulb.setHue(newHue);
+            lightbulb.setSaturation(newSat);
+            lightbulb.setValue(newVal);
+            System.out.printf("\nColor changed to: | H=%.1f | S=%.2f | V=%.2f%n", lightbulb.getHue(), lightbulb.getSaturation(), lightbulb.getValue());
+            lightbulb.notifyObservers("COLOR_CHANGED", String.format("Changed HSV to [%.1f,%.2f,%.2f]", newHue, newSat, newVal));
+        } catch (IllegalArgumentException e) {
+            System.out.println("\nInvalid color parameter.");
+        }
+    }
+
     @Override
     protected void showEditMenu() {
         PrintHelper.showEditDeviceMenu();
@@ -76,8 +98,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
             case "4": device = new TV(name);break;
             case "5": device = new Console(name);break;
             case "6": device = new Camera(name);break;
-            default:
-                System.out.println("\nUnexpected value.");
+            default: System.out.println("\nUnexpected value.");
         }
         return device;
     }
@@ -86,7 +107,7 @@ public class DeviceController extends Handler<SmartDevice<?>> {
     protected void onAdd(SmartDevice<?> device) {
         device.addObserver(fileLogger);
         device.setRoom(this.room);
-        device.notifyObservers("Added new device" , String.format("Added device %s.", device.getName()));
+        device.notifyObservers("DEVICE_ADDED" , String.format("Added device %s.", device.getName()));
     }
 
 

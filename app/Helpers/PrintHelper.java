@@ -35,7 +35,6 @@ public class PrintHelper {
         System.out.println("2) Edit Size");
         System.out.println("3) Edit Floors");
         System.out.println("4) Edit Rooms");
-        System.out.println("5) Manage Rooms");
         System.out.println("0) Back");
     }
 
@@ -92,12 +91,13 @@ public class PrintHelper {
         System.out.println("2) Status");
         System.out.println("3) Turn ON");
         System.out.println("4) Turn OFF");
+        System.out.println("5) Change Color [ONLY FOR LIGHTBULB]");
         System.out.println("0) Back");
     }
 
     public static <T> void showList(List<T> list){
         for (int i = 0; i < list.size(); i++) {
-            System.out.println(i + ": " + list.get(i));
+            System.out.println(i + ") " + list.get(i));
         }
     }
 
