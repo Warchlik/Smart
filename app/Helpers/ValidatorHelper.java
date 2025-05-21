@@ -1,6 +1,7 @@
 package app.Helpers;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class ValidatorHelper {
@@ -98,5 +99,10 @@ public class ValidatorHelper {
             return true;
         }
         return false;
+    }
+
+    public static <E extends Enum<E>> E getRandomEnumValue(E[] enumList){
+        Random random = new Random();
+        return enumList[random.nextInt(enumList.length)];
     }
 }

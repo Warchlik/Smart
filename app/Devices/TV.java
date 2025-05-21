@@ -1,17 +1,36 @@
 package app.Devices;
 
+import app.Helpers.ValidatorHelper;
 import app.Interfaces.Switchable;
+import app.SmartEnums.FilmEnum;
 import app.SmartEnums.TVEnum;
 
 public class TV extends SmartDevice<TVEnum> implements Switchable {
 
+    private FilmEnum film;
     public TV(String name) {
         super(name , TVEnum.OFF);
     }
 
     @Override
     public void simulate() {
+        Thread thread = new Thread(() -> {
+            synchronized (this) {
+                try {
+                    while (isOn()) {
+                        FilmEnum prevFilm = this.film;
+                        this.setFilm(ValidatorHelper.getRandomEnumValue(FilmEnum.values()) , prevFilm);
+                        notifyObservers("CHANGED_GAME", String.format("Your console is JailBrake :) and now play: %s" , this.getFilm()));
+                        this.wait(5000);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
 
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @Override
@@ -36,5 +55,17 @@ public class TV extends SmartDevice<TVEnum> implements Switchable {
     @Override
     public boolean isOn() {
         return this.getStatus() != TVEnum.OFF;
+    }
+
+    public FilmEnum getFilm(){
+        return this.film;
+    }
+
+    public void setFilm(FilmEnum film , FilmEnum prevFilm){
+        if (film == prevFilm){
+            this.setFilm(ValidatorHelper.getRandomEnumValue(FilmEnum.values()) , prevFilm);
+        }else {
+            this.film = film;
+        }
     }
 }
