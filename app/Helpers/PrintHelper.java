@@ -17,6 +17,7 @@ public class PrintHelper {
         System.out.println("1) Home Options");
         System.out.println("2) Room Options");
         System.out.println("3) Device Options");
+        System.out.println("4) Rule Options");
         System.out.println("0) Exit");
     }
 
@@ -75,6 +76,37 @@ public class PrintHelper {
         System.out.println("0) Back");
     }
 
+    public static void showRuleMenu(){
+        System.out.println("\n=== Rule Menu ===");
+        System.out.println("1) Add rule");
+        System.out.println("2) Edit rule");
+        System.out.println("3) Show rule list");
+        System.out.println("4) Delete rule");
+        System.out.println("0) Back");
+    }
+
+    public static void showGlobalRuleMenu(){
+        System.out.println("\n=== Global Rule Menu ===");
+        System.out.println("1) Add global rule");
+        System.out.println("2) Edit global rule");
+        System.out.println("3) Show global rule list");
+        System.out.println("4) Delete global rule");
+        System.out.println("0) Back");
+    }
+
+    public static void showRuleEditMenu(){
+        System.out.println("\n=== Select Attribute For Rule ===");
+        System.out.println("1) Name");
+        System.out.println("0) Back");
+    }
+
+    public static void showRulesVariant(){
+        System.out.println("\n=== Rule Scope ===");
+        System.out.println("1) Home Rules (all devices in home)");
+        System.out.println("2) Show Rules List");
+        System.out.println("0) Back");
+    }
+
     public static void showAddDeviceMenu(){
         System.out.println("\n=== ADD Device Menu ===");
         System.out.println("1) Lightbulb");
@@ -95,9 +127,34 @@ public class PrintHelper {
         System.out.println("0) Back");
     }
 
+    public static void showDeviceTypeMenu(){
+        System.out.println("\n=== Device Type For Choice ===");
+        System.out.println("1) Lightbulb");
+        System.out.println("2) Outlet");
+        System.out.println("3) Temperature Sensor");
+        System.out.println("4) TV");
+        System.out.println("5) PlayStation");
+        System.out.println("6) Camera");
+    }
+
+    public static void showEditRuleMenu(){
+        System.out.println("\n=== Edit Rule ===");
+        System.out.println("1) Change name");
+        System.out.println("2) Change description");
+        System.out.println("3) Reconfigure logic");
+        System.out.println("0) Back");
+    }
+
     public static <T> void showList(List<T> list){
         for (int i = 0; i < list.size(); i++) {
             System.out.println(i + ") " + list.get(i));
+        }
+    }
+
+    public static <T> void printViewList(List<T> list){
+        System.out.println("\n--- CURRENT LIST ---");
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(i + " -> " + list.get(i));
         }
     }
 

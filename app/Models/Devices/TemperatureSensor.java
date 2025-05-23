@@ -1,4 +1,4 @@
-package app.Devices;
+package app.Models.Devices;
 
 import app.Interfaces.SensorDevice;
 import app.Interfaces.Switchable;
@@ -37,10 +37,6 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
 
         thread.setDaemon(true);
         thread.start();
-    }
-
-    protected boolean checkStatusForSensor(){
-        return this.getStatus() == TemperatureSensorEnum.ON || this.getStatus() == TemperatureSensorEnum.ACTIVE;
     }
 
     @Override

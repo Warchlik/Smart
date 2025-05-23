@@ -1,6 +1,6 @@
-package app.House;
+package app.Models;
 
-import app.Devices.SmartDevice;
+import app.Models.Devices.SmartDevice;
 import app.SmartEnums.RoomEnum;
 
 import java.util.ArrayList;
@@ -24,14 +24,6 @@ public class Room {
                 name,
                 type
         );
-    }
-
-    public void addDevice(SmartDevice<?> device){
-        this.deviceList.add(device);
-    }
-
-    public void removeDevice(int index){
-        this.deviceList.remove(index);
     }
 
     public List<SmartDevice<?>> getDeviceList(){

@@ -1,4 +1,4 @@
-package app.Devices;
+package app.Models.Devices;
 
 import app.Interfaces.SensorDevice;
 import app.Interfaces.Switchable;

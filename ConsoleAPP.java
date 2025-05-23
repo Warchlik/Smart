@@ -2,15 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import app.Controllers.DeviceController;
-import app.Controllers.HomeController;
-import app.Controllers.RoomController;
-import app.Devices.SmartDevice;
+import app.Controllers.*;
+import app.Models.Devices.SmartDevice;
 import app.FileLogger;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
-import app.House.Home;
-import app.House.Room;
+import app.Models.Home;
+import app.Models.Room;
+import app.Models.Rule;
 
 public class ConsoleAPP {
 
@@ -20,11 +19,16 @@ public class ConsoleAPP {
     private final HomeController homeController;
     private final RoomController roomController;
     private final DeviceController deviceController;
+    private final RuleController ruleController;
+    private final GlobalRuleController globalRuleController;
+
 
     public ConsoleAPP(){
         this.homeController = new HomeController();
         this.roomController = new RoomController();
         this.deviceController = new DeviceController(new FileLogger("smart_logs.tsv"));
+        this.ruleController = new RuleController();
+        this.globalRuleController = new GlobalRuleController();
         this.openInterface();
     }
 
@@ -44,6 +48,7 @@ public class ConsoleAPP {
             case "1": handleHomeOptions(scanner); break;
             case "2": handleRoomOptions(scanner); break;
             case "3": handleDeviceOptions(scanner); break;
+            case "4": handleRuleOptions(scanner); break;
             case "0": setRunning(false); break;
             default: System.out.println("\nUnexpected value, try again."); break;
         }
@@ -113,6 +118,87 @@ public class ConsoleAPP {
             }
             this.deviceController.handleChoice(devices, choice , scanner);
         }
+    }
+
+    private void handleRuleOptions(Scanner scanner){
+        if (homeList.isEmpty()){
+            System.out.println("\nHome list is empty, add some home to get access to this options:");
+            PrintHelper.waitForEnter(scanner);
+            return;
+        }
+
+        System.out.println("\n=== Choice home ===");
+        PrintHelper.showList(this.homeList);
+        int homeIndex = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , this.homeList);
+        List<Room> rooms = this.homeList.get(homeIndex).getRooms();
+
+        if (rooms.isEmpty()){
+            System.out.println("\nRoom list is empty, add some home to get access to this options:");
+            PrintHelper.waitForEnter(scanner);
+            return;
+        }
+
+        System.out.println("\n=== Choice room ===");
+        PrintHelper.showList(rooms);
+        int room = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , rooms);
+        Room selectedRoom = rooms.get(room);
+        List<SmartDevice<?>> devices = selectedRoom.getDeviceList();
+        this.deviceController.setRoom(selectedRoom);
+
+        if (devices.isEmpty()){
+            System.out.println("\nDevice list is empty, add some home to get access to this options:");
+            PrintHelper.waitForEnter(scanner);
+            return;
+        }
+
+        System.out.println("\n=== Choice device ===");
+        PrintHelper.showList(devices);
+        int device = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , devices);
+        SmartDevice<?> selectedDevice = devices.get(device);
+        List<Rule> rules = selectedDevice.getRuleList();
+
+        this.ruleController.setCurrentDevice(selectedDevice);
+
+        while (true){
+            PrintHelper.showRuleMenu();
+            String choice = PrintHelper.readLine("\nChoice Option: " , scanner);
+            if ("0".equals(choice)){
+                break;
+            }
+            this.ruleController.handleChoice(rules, choice , scanner);
+        }
+    }
+
+//    private void handleRuleOptions(Scanner scanner){
+//        if (homeList.isEmpty()){
+//            System.out.println("\nAdd at least one home first.");
+//            PrintHelper.waitForEnter(scanner);
+//            return;
+//        }
+//
+//        System.out.println("\n=== Choice home ===");
+//        PrintHelper.showList(this.homeList);
+//        int homeIndex = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , this.homeList);
+//        Home selectedHome = this.homeList.get(homeIndex);
+//
+//        while (true){
+//            PrintHelper.showRuleMenu();
+//            String choice = PrintHelper.readLine("\nChoice Option: " , scanner);
+//            if ("0".equals(choice)){
+//                break;
+//            }
+//            this.ruleController.handleChoice(selectedHome.getRuleList(), choice, scanner);
+//        }
+//    }
+
+    private void handleHomeRules(Scanner scanner , Home home) {
+        PrintHelper.showRuleMenu();
+        String choice = PrintHelper.readLine("Choice: ", scanner);
+        this.ruleController.handleChoice(home.getRuleList(), choice, scanner);
+    }
+
+    private void handleShowRules(Scanner scanner , Home home){
+        PrintHelper.printViewList(home.getRuleList());
     }
 
     public boolean isRunning(){

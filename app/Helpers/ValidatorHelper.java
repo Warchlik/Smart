@@ -18,17 +18,6 @@ public class ValidatorHelper {
         }
     }
 
-//    public static String checkIndexString(String string, Scanner scanner , List<?> list) {
-//        while (true) {
-//            String line = PrintHelper.readLine(string, scanner);
-//            if (line.trim().isEmpty() || (Integer.parseInt(line) > list.size())){
-//                System.out.println("\nInvalid Value, please try again.");
-//            }else{
-//                return line;
-//            }
-//        }
-//    }
-
     public static int checkIndexInt(String string , Scanner scanner , List<?> list){
         while(true){
             String line = PrintHelper.readLine(string, scanner);
@@ -104,5 +93,37 @@ public class ValidatorHelper {
     public static <E extends Enum<E>> E getRandomEnumValue(E[] enumList){
         Random random = new Random();
         return enumList[random.nextInt(enumList.length)];
+    }
+
+    public static int checkIsHueRadius(String string, Scanner scanner) {
+        while (true) {
+            String line = PrintHelper.readLine(string, scanner);
+            try {
+                int hue = Integer.parseInt(line);
+                if (hue >= 1 && hue <= 360) {
+                    return hue;
+                } else {
+                    System.out.println("\nInvalid Value: number must be between 1 and 360. Please try again.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid Value: not a whole number. Please try again.");
+            }
+        }
+    }
+
+    public static double checkIsSaturationAndValueRadius(String string, Scanner scanner) {
+        while (true) {
+            String line = PrintHelper.readLine(string, scanner);
+            try {
+                double doubleValue = Double.parseDouble(line);
+                if (doubleValue >= 0 && doubleValue <= 1) {
+                    return doubleValue;
+                } else {
+                    System.out.println("\nInvalid Value: number must be between 1 and 360. Please try again.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid Value: not a whole number. Please try again.");
+            }
+        }
     }
 }

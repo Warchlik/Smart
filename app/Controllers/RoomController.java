@@ -1,9 +1,8 @@
 package app.Controllers;
 
-import app.Devices.SmartDevice;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
-import app.House.Room;
+import app.Models.Room;
 import app.Interfaces.Handler;
 import app.SmartEnums.RoomEnum;
 

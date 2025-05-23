@@ -1,4 +1,4 @@
-package app.Devices;
+package app.Models.Devices;
 
 import app.Interfaces.Switchable;
 import app.SmartEnums.DefaultDeviceEnum;
@@ -56,23 +56,14 @@ public class Lightbulb extends SmartDevice<DefaultDeviceEnum> implements Switcha
     }
 
     public void setHue(double hue) {
-        if (hue < 0 || hue > 360) {
-            throw new IllegalArgumentException("\nHue must be in [0, 360]");
-        }
         this.hue = hue;
     }
 
     public void setSaturation(double saturation) {
-        if (saturation < 0.0 || saturation > 1.0) {
-            throw new IllegalArgumentException("\nSaturation must be in [0, 1]");
-        }
         this.saturation = saturation;
     }
 
     public void setValue(double value) {
-        if (value < 0.0 || value > 1.0) {
-            throw new IllegalArgumentException("\nValue must be in [0, 1]");
-        }
         this.value = value;
     }
 
@@ -118,17 +109,12 @@ public class Lightbulb extends SmartDevice<DefaultDeviceEnum> implements Switcha
         return new Color(r, g, b);
     }
 
-//    @Override
-//    public void simulate() {
-//
-//    }
-
     @Override
     public void simulate() {
         Thread thread = new Thread(() -> {
             synchronized (this) {
                 try {
-                    while (isOn()) {
+                    while (isOn() && this.getRuleList().isEmpty()) {
                         this.getRGBColor();
                         notifyObservers("CHANGED_COLOR", "Color has been changed.");
                         this.wait(5000);

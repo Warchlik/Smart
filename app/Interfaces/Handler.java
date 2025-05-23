@@ -1,6 +1,5 @@
 package app.Interfaces;
 
-import app.Devices.TemperatureSensor;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
 
@@ -9,12 +8,12 @@ import java.util.Scanner;
 
 public abstract class Handler<T> {
 
-    public void handleChoice(List<T> homeList, String choice, Scanner scanner) {
+    public void handleChoice(List<T> list, String choice, Scanner scanner) {
         switch (choice) {
-            case "1": handleAdd(homeList , scanner); break;
-            case "2": handleEdit(homeList , scanner); break;
-            case "3": handleShow(homeList , scanner); break;
-            case "4": handleRemove(homeList , scanner); break;
+            case "1": handleAdd(list , scanner); break;
+            case "2": handleEdit(list , scanner); break;
+            case "3": handleShow(list , scanner); break;
+            case "4": handleRemove(list , scanner); break;
             case "0": break;
             default: System.out.println("\nUnexpected value, try again."); PrintHelper.waitForEnter(scanner); break;
         }

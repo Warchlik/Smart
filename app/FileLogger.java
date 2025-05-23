@@ -1,6 +1,6 @@
 package app;
 
-import app.Devices.SmartDevice;
+import app.Models.Devices.SmartDevice;
 import app.Interfaces.DeviceObserver;
 
 import java.io.BufferedWriter;
@@ -23,8 +23,8 @@ public class FileLogger implements DeviceObserver {
         try (BufferedWriter file = new BufferedWriter(new FileWriter(filename))) {
             file.write(header);
             file.newLine();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -33,7 +33,7 @@ public class FileLogger implements DeviceObserver {
         String line = String.join("\t",
                 LocalDateTime.now().format(fmt),
                 device.getId().toString(),
-                device.getClass().getSimpleName(),
+                device.getName(),
                 device.getRoomName().getType().name(),
                 eventType,
                 description
@@ -42,8 +42,8 @@ public class FileLogger implements DeviceObserver {
         try (BufferedWriter file = new BufferedWriter(new FileWriter(filename, true))) {
             file.write(line);
             file.newLine();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }
