@@ -10,17 +10,17 @@ import app.Helpers.ValidatorHelper;
 import app.Models.Home;
 import app.Models.Room;
 import app.Models.Rule;
+import app.Service.HomeService;
 
 public class ConsoleAPP {
 
     private boolean running = true;
-    private final List<Home> homeList = new ArrayList<>();
+    private final List<Home> homeList;
 
     private final HomeController homeController;
     private final RoomController roomController;
     private final DeviceController deviceController;
     private final RuleController ruleController;
-    private final GlobalRuleController globalRuleController;
 
 
     public ConsoleAPP(){
@@ -28,7 +28,7 @@ public class ConsoleAPP {
         this.roomController = new RoomController();
         this.deviceController = new DeviceController(new FileLogger("smart_logs.tsv"));
         this.ruleController = new RuleController();
-        this.globalRuleController = new GlobalRuleController();
+        this.homeList = HomeService.getInstance().getHomelist();
         this.openInterface();
     }
 
@@ -167,38 +167,6 @@ public class ConsoleAPP {
             }
             this.ruleController.handleChoice(rules, choice , scanner);
         }
-    }
-
-//    private void handleRuleOptions(Scanner scanner){
-//        if (homeList.isEmpty()){
-//            System.out.println("\nAdd at least one home first.");
-//            PrintHelper.waitForEnter(scanner);
-//            return;
-//        }
-//
-//        System.out.println("\n=== Choice home ===");
-//        PrintHelper.showList(this.homeList);
-//        int homeIndex = ValidatorHelper.checkIndexInt("\nChoice Option: " , scanner , this.homeList);
-//        Home selectedHome = this.homeList.get(homeIndex);
-//
-//        while (true){
-//            PrintHelper.showRuleMenu();
-//            String choice = PrintHelper.readLine("\nChoice Option: " , scanner);
-//            if ("0".equals(choice)){
-//                break;
-//            }
-//            this.ruleController.handleChoice(selectedHome.getRuleList(), choice, scanner);
-//        }
-//    }
-
-    private void handleHomeRules(Scanner scanner , Home home) {
-        PrintHelper.showRuleMenu();
-        String choice = PrintHelper.readLine("Choice: ", scanner);
-        this.ruleController.handleChoice(home.getRuleList(), choice, scanner);
-    }
-
-    private void handleShowRules(Scanner scanner , Home home){
-        PrintHelper.printViewList(home.getRuleList());
     }
 
     public boolean isRunning(){

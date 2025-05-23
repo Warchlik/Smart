@@ -41,7 +41,7 @@ public class Rule {
                 checkConditionAndStartAction();
                 synchronized (this) {
                     try {
-                        this.wait(500);
+                        this.wait(6000);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         break;
@@ -73,15 +73,15 @@ public class Rule {
         this.description = description;
     }
 
-    public void setCondition(Predicate<SmartDevice<?>> cond) {
+    public void setCondition(Predicate<SmartDevice<?>> condition) {
         synchronized(this) {
-            this.condition = cond;
+            this.condition = condition;
             this.notifyAll();
         }
     }
-    public void setAction(Consumer<SmartDevice<?>> act) {
+    public void setAction(Consumer<SmartDevice<?>> action) {
         synchronized(this) {
-            this.action = act;
+            this.action = action;
         }
     }
 }
