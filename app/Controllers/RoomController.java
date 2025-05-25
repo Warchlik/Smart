@@ -3,7 +3,6 @@ package app.Controllers;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
 import app.Models.Room;
-import app.Interfaces.Handler;
 import app.SmartEnums.RoomEnum;
 
 import java.util.Scanner;

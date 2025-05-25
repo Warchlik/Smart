@@ -1,9 +1,7 @@
-package app.Models.Devices;
+package app.Models;
 
-import app.Models.Room;
 import app.Interfaces.DeviceObserver;
 import app.Interfaces.ObservableDevice;
-import app.Models.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +12,9 @@ public abstract class SmartDevice<E extends Enum<E>> implements ObservableDevice
     private UUID id;
     private String name;
     private E status;
-    private List<DeviceObserver> observableDeviceList = new ArrayList<>();
+    private final List<DeviceObserver> observableDeviceList = new ArrayList<>();
     private Room room;
-    private List<Rule> ruleList = new ArrayList<>();
+    private final List<Rule> ruleList = new ArrayList<>();
 
     public SmartDevice(String name , E defaultStatus) {
         this.id = UUID.randomUUID();

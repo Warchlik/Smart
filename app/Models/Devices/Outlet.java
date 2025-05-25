@@ -1,6 +1,7 @@
 package app.Models.Devices;
 
 import app.Interfaces.Switchable;
+import app.Models.SmartDevice;
 import app.SmartEnums.DefaultDeviceEnum;
 
 public class Outlet extends SmartDevice<DefaultDeviceEnum> implements Switchable {

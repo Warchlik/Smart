@@ -2,6 +2,7 @@ package app.Models.Devices;
 
 import app.Interfaces.SensorDevice;
 import app.Interfaces.Switchable;
+import app.Models.SmartDevice;
 import app.SmartEnums.CameraEnum;
 
 public class Camera extends SmartDevice<CameraEnum> implements Switchable , SensorDevice<Boolean> {

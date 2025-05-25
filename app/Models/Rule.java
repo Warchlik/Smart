@@ -1,8 +1,5 @@
 package app.Models;
 
-import app.Models.Devices.Lightbulb;
-import app.Models.Devices.Outlet;
-import app.Models.Devices.SmartDevice;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -42,7 +39,7 @@ public class Rule {
                 synchronized (this) {
                     try {
                         this.wait(6000);
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException exception) {
                         Thread.currentThread().interrupt();
                         break;
                     }

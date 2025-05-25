@@ -18,6 +18,7 @@ public class PrintHelper {
         System.out.println("2) Room Options");
         System.out.println("3) Device Options");
         System.out.println("4) Rule Options");
+        System.out.println("5) Generate report");
         System.out.println("0) Exit");
     }
 
@@ -73,6 +74,8 @@ public class PrintHelper {
         System.out.println("2) Edit device");
         System.out.println("3) Show device list");
         System.out.println("4) Delete device");
+        System.out.println("5) Turn ON all device in this room");
+        System.out.println("6) Turn OFF all device in this room");
         System.out.println("0) Back");
     }
 
@@ -142,6 +145,15 @@ public class PrintHelper {
         System.out.println("1) Change name");
         System.out.println("2) Change description");
         System.out.println("3) Reconfigure logic");
+        System.out.println("0) Back");
+    }
+
+    public static void showReportMenu(){
+        System.out.println("\n=== Report Menu ===");
+        System.out.println("1) All status‐change log entries");
+        System.out.println("2) Devices currently ON");
+        System.out.println("3) Devices currently OFF");
+        System.out.println("4) All rule‐triggered entries");
         System.out.println("0) Back");
     }
 

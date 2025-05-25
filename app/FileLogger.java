@@ -1,6 +1,6 @@
 package app;
 
-import app.Models.Devices.SmartDevice;
+import app.Models.SmartDevice;
 import app.Interfaces.DeviceObserver;
 
 import java.io.BufferedWriter;
@@ -33,8 +33,8 @@ public class FileLogger implements DeviceObserver {
         String line = String.join("\t",
                 LocalDateTime.now().format(fmt),
                 device.getId().toString(),
-                device.getName(),
-                device.getRoomName().getType().name(),
+                device.getName() + " | " + device.getClass().getSimpleName(),
+                device.getRoomName() + " | " + device.getRoomName().getType().name(),
                 eventType,
                 description
         );

@@ -20,11 +20,4 @@ public class HomeService {
         return this.homelist;
     }
 
-//    public void addRule(Home rule) {
-//        this.homelist.add(rule);
-//    }
-//
-//    public void removeRule(Home rule) {
-//        this.homelist.remove(rule);
-//    }
 }

@@ -2,6 +2,7 @@ package app.Models.Devices;
 
 import app.Helpers.ValidatorHelper;
 import app.Interfaces.Switchable;
+import app.Models.SmartDevice;
 import app.SmartEnums.ConsoleEnum;
 import app.SmartEnums.GameEnum;
 

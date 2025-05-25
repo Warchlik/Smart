@@ -2,6 +2,7 @@ package app.Models.Devices;
 
 import app.Interfaces.SensorDevice;
 import app.Interfaces.Switchable;
+import app.Models.SmartDevice;
 import app.SmartEnums.TemperatureSensorEnum;
 import java.util.Random;
 
@@ -39,6 +40,10 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
         thread.start();
     }
 
+    public void setTemperature(int temperature){
+        this.temperature = temperature;
+    }
+
     @Override
     public void turnOn() {
         if (!isOn()){
@@ -71,7 +76,7 @@ public class TemperatureSensor extends SmartDevice<TemperatureSensorEnum> implem
 
     @Override
     public String getUnit() {
-        return this.getClass().getName();
+        return "°C";
     }
 
     @Override

@@ -5,8 +5,10 @@ import app.FileLogger;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
 import app.Models.Room;
-import app.Interfaces.Handler;
 import app.Interfaces.Switchable;
+import app.Models.SmartDevice;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class DeviceController extends Handler<SmartDevice<?>> {
@@ -16,6 +18,52 @@ public class DeviceController extends Handler<SmartDevice<?>> {
 
     public DeviceController(FileLogger fileLogger) {
         this.fileLogger = fileLogger;
+    }
+
+    @Override
+    public void handleChoice(List<SmartDevice<?>> list, String choice, Scanner scanner) {
+        switch (choice) {
+            case "1": handleAdd(list , scanner); break;
+            case "2": handleEdit(list , scanner); break;
+            case "3": handleShow(list , scanner); break;
+            case "4": handleRemove(list , scanner); break;
+            case "5": handleTurnOnInRoom(list , scanner); break;
+            case "6": handleTurnOffInRoom(list , scanner); break;
+            case "0": break;
+            default: System.out.println("\nUnexpected value, try again."); PrintHelper.waitForEnter(scanner); break;
+        }
+    }
+
+    private void handleTurnOnInRoom(List<SmartDevice<?>> devices, Scanner scanner) {
+        if (devices.isEmpty()){
+            System.out.println("\nDevice list is empty, add some devices to get access to this options:");
+            PrintHelper.waitForEnter(scanner);
+            return;
+        }
+
+        devices.stream()
+                .filter(device -> device instanceof Switchable)
+                .map(device -> (Switchable)device)
+                .filter(device -> !device.isOn())
+                .forEach(Switchable::turnOn);
+        System.out.println("\nAll previously OFF devices have been turned ON.");
+        PrintHelper.waitForEnter(scanner);
+    }
+
+    private void handleTurnOffInRoom(List<SmartDevice<?>> devices, Scanner scanner) {
+        if (devices.isEmpty()){
+            System.out.println("\nDevice list is empty, add some devices to get access to this options:");
+            PrintHelper.waitForEnter(scanner);
+            return;
+        }
+
+        devices.stream()
+                .filter(device -> device instanceof Switchable)
+                .map(device -> (Switchable)device)
+                .filter(Switchable::isOn)
+                .forEach(Switchable::turnOff);
+        System.out.println("\nAll previously ON devices have been turned OFF.");
+        PrintHelper.waitForEnter(scanner);
     }
 
     @Override

@@ -2,6 +2,7 @@ package app.Models.Devices;
 
 import app.Helpers.ValidatorHelper;
 import app.Interfaces.Switchable;
+import app.Models.SmartDevice;
 import app.SmartEnums.FilmEnum;
 import app.SmartEnums.TVEnum;
 
@@ -37,6 +38,7 @@ public class TV extends SmartDevice<TVEnum> implements Switchable {
     public void turnOn() {
         if (!isOn()){
             this.setStatus(TVEnum.ON);
+            this.simulate();
             System.out.println("\nYou turn on TV.");
         }else {
             System.out.println("\nTV is in use now, you can not ON it second time.");

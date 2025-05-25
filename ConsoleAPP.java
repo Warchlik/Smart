@@ -1,9 +1,8 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import app.Controllers.*;
-import app.Models.Devices.SmartDevice;
+import app.Models.SmartDevice;
 import app.FileLogger;
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
@@ -11,6 +10,7 @@ import app.Models.Home;
 import app.Models.Room;
 import app.Models.Rule;
 import app.Service.HomeService;
+import app.ReportService;
 
 public class ConsoleAPP {
 
@@ -49,6 +49,7 @@ public class ConsoleAPP {
             case "2": handleRoomOptions(scanner); break;
             case "3": handleDeviceOptions(scanner); break;
             case "4": handleRuleOptions(scanner); break;
+            case "5": handleReportOptions(scanner); break;
             case "0": setRunning(false); break;
             default: System.out.println("\nUnexpected value, try again."); break;
         }
@@ -166,6 +167,23 @@ public class ConsoleAPP {
                 break;
             }
             this.ruleController.handleChoice(rules, choice , scanner);
+        }
+    }
+
+    private void handleReportOptions(Scanner scanner) {
+        while (true) {
+            PrintHelper.showReportMenu();
+            String choice = PrintHelper.readLine("\nChoice report: ", scanner);
+            if ("0".equals(choice)) break;
+
+            switch (choice) {
+                case "1": ReportService.printStatusChangeLogs();break;
+                case "2": ReportService.printCurrentlyOnDevices();break;
+                case "3": ReportService.printCurrentlyOffDevices();break;
+                case "4": ReportService.printRuleTriggeredLogs();break;
+                default: System.out.println("\nUnexpected value, try again.");
+            }
+            PrintHelper.waitForEnter(scanner);
         }
     }
 

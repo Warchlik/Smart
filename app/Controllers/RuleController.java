@@ -2,10 +2,10 @@ package app.Controllers;
 
 import app.Helpers.PrintHelper;
 import app.Helpers.ValidatorHelper;
-import app.Interfaces.Handler;
 import app.Interfaces.Switchable;
 import app.Models.Devices.*;
 import app.Models.Rule;
+import app.Models.SmartDevice;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -53,9 +53,9 @@ public class RuleController extends Handler<Rule> {
         String type = currentDevice.getClass().getSimpleName();
         switch (type) {
             case "TemperatureSensor" -> {
-                int staticTemperature = ValidatorHelper.checkInputValueInt("\nTrigger when temp < (°C): ", scanner);
+                int staticTemperature = ValidatorHelper.checkInputValueInt("\nSet temperature: (°C): ", scanner);
                 condition = device -> ((TemperatureSensor)device).readValue() < staticTemperature;
-                action = device -> ((TemperatureSensor)device).turnOn();
+                action = device -> ((TemperatureSensor)device).setTemperature(staticTemperature);
             }
             case "Lightbulb" -> {
                 double h = ValidatorHelper.checkIsHueRadius("\nHue [0–360]: ", scanner);
@@ -64,9 +64,6 @@ public class RuleController extends Handler<Rule> {
                 condition = device -> true;
                 action = device -> {
                     Lightbulb lightbulb = (Lightbulb)device;
-                    if (!lightbulb.isOn()) {
-                        lightbulb.turnOn();
-                    }
                     lightbulb.setHue(h); lightbulb.setSaturation(s); lightbulb.setValue(v);
                 };
             }

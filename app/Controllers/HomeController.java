@@ -3,7 +3,6 @@ package app.Controllers;
 import java.util.Scanner;
 import app.Models.Home;
 import app.Helpers.*;
-import app.Interfaces.Handler;
 
 public class HomeController extends Handler<Home> {
 

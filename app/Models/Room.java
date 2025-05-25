@@ -1,6 +1,5 @@
 package app.Models;
 
-import app.Models.Devices.SmartDevice;
 import app.SmartEnums.RoomEnum;
 
 import java.util.ArrayList;

@@ -13,7 +13,6 @@ public class Home {
     private int floors;
     private int rooms;
     private List<Room> roomsList;
-    private List<Rule> ruleList;
 
     public Home(String name , float size , int floors, int rooms) {
         this.name = name;
@@ -21,7 +20,6 @@ public class Home {
         this.floors = floors;
         this.rooms = rooms;
         this.roomsList = new ArrayList<>();
-        this.ruleList = new ArrayList<>();
     }
 
     public String toString(){
@@ -56,10 +54,6 @@ public class Home {
         return this.rooms;
     }
 
-    public void addRoom(Room room){
-        this.roomsList.add(room);
-    }
-
     public void setName(String name){
         this.name = name;
     }
@@ -77,9 +71,5 @@ public class Home {
             throw new IllegalArgumentException("Cannot set rooms to " + rooms + ", already have " + roomsList.size());
         }
         this.rooms = rooms;
-    }
-
-    public List<Rule> getRuleList(){
-        return this.ruleList;
     }
 }
